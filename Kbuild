@@ -1,3 +1,13 @@
+# Detect Android cfg80211 multi-link API backports independently of version.
+found = $(shell grep -qF "unsigned int link_id" $(srctree)/include/net/cfg80211.h && echo yes)
+ifeq ($(found),yes)
+cppflags-y += -DCFG80211_SINGLE_NETDEV_MULTI_LINK_SUPPORT
+endif
+found = $(shell grep -qF "u16 punct_bitmap" $(srctree)/include/net/cfg80211.h && echo yes)
+ifeq ($(found),yes)
+cppflags-y += -DCFG80211_RU_PUNCT_NOTIFY
+endif
+
 # We can build either as part of a standalone Kernel build or as
 # an external module.  Determine which mechanism is being used
 ifeq ($(MODNAME),)
